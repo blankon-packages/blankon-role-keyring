@@ -8,7 +8,7 @@
 # my name from the file itself.  (I assert my moral right of
 # paternity under the Copyright, Designs and Patents Act 1988.)
 # This file may have to be extensively modified
-
+	
 install_dir=install -d -m 755
 install_file=install -m 644
 install_script=install -m 755
@@ -21,7 +21,7 @@ build:
 clean:
 	$(checkdir)
 	-rm -f foo foo.asc *.bak *~ */*~ debian/files* debian/*substvars
-	-rm -rf debian/tmp debian/blankon-keyring-udeb
+	-rm -rf debian/tmp debian/blankon-role-keyring-udeb
 
 binary-indep: checkroot
 	$(checkdir)
@@ -30,39 +30,41 @@ binary-indep: checkroot
 	$(install_script) debian/postinst debian/tmp/DEBIAN/
 
 	$(install_dir) debian/tmp/usr/share/keyrings/
-	$(install_file) keyrings/blankon-archive-keyring.gpg debian/tmp/usr/share/keyrings/
-	$(install_file) keyrings/blankon-master-keyring.gpg debian/tmp/usr/share/keyrings/
+	$(install_file) keyrings/blankon-role-keyring.gpg debian/tmp/usr/share/keyrings/
+	$(install_file) keyrings/blankon-role-master-keyring.gpg debian/tmp/usr/share/keyrings/
 
-	$(install_dir) debian/tmp/usr/share/doc/blankon-keyring/
-	$(install_file) README debian/tmp/usr/share/doc/blankon-keyring/
-	$(install_file) debian/changelog debian/tmp/usr/share/doc/blankon-keyring/changelog
-	gzip -9v debian/tmp/usr/share/doc/blankon-keyring/*
-	$(install_file) debian/copyright debian/tmp/usr/share/doc/blankon-keyring/
-	cd debian/tmp; find -type f \! -regex '.*/DEBIAN/.*' -printf '%P\0' | xargs -r0 md5sum >DEBIAN/md5sums
+	$(install_dir) debian/tmp/etc/apt/trusted.gpg.d/
+	$(install_file) active-keys/blankon-role-keyring.gpg debian/tmp/etc/apt/trusted.gpg.d/
+	
+	$(install_dir) debian/tmp/usr/share/doc/blankon-role-keyring/
+	$(install_file) README debian/tmp/usr/share/doc/blankon-role-keyring/
+	$(install_file) debian/changelog debian/tmp/usr/share/doc/blankon-role-keyring/changelog
+	gzip -9v debian/tmp/usr/share/doc/blankon-role-keyring/*
+	$(install_file) debian/copyright debian/tmp/usr/share/doc/blankon-role-keyring/
 
-	dpkg-gencontrol -pblankon-keyring -isp
+	dpkg-gencontrol -pblankon-role-keyring -isp
 	chown -R root.root debian/tmp
 	chmod -R go=rX debian/tmp
 	dpkg --build debian/tmp ..
 
-	-rm -rf debian/blankon-keyring-udeb
-	$(install_dir) debian/blankon-keyring-udeb/DEBIAN/
+	-rm -rf debian/blankon-role-keyring-udeb
+	$(install_dir) debian/blankon-role-keyring-udeb/DEBIAN/
 
-	$(install_dir) debian/blankon-keyring-udeb/usr/share/keyrings/
-	$(install_file) keyrings/blankon-archive-keyring.gpg debian/blankon-keyring-udeb/usr/share/keyrings/
-	install -m 755 debian/blankon-keyring-udeb.postinst debian/blankon-keyring-udeb/DEBIAN/postinst
+	$(install_dir) debian/blankon-role-keyring-udeb/usr/share/keyrings/
+	$(install_file) keyrings/blankon-role-keyring.gpg debian/blankon-role-keyring-udeb/usr/share/keyrings/
+	install -m 755 debian/blankon-role-keyring-udeb.postinst debian/blankon-role-keyring-udeb/DEBIAN/postinst
 
 	# Don't let dpkg-gencontrol write incorrect guesses to debian/files.
 	# Instead, register the udeb manually.
-	dpkg-gencontrol -nblankon-keyring-udeb_$(VERSION)_all.udeb -pblankon-keyring-udeb -Tdebian/blankon-keyring-udeb.substvars -Pdebian/blankon-keyring-udeb -isp
-	chown -R root.root debian/blankon-keyring-udeb
-	chmod -R go=rX debian/blankon-keyring-udeb
-	dpkg --build debian/blankon-keyring-udeb ../blankon-keyring-udeb_$(VERSION)_all.udeb
+	dpkg-gencontrol -nblankon-role-keyring-udeb_$(VERSION)_all.udeb -pblankon-role-keyring-udeb -Tdebian/blankon-role-keyring-udeb.substvars -Pdebian/blankon-role-keyring-udeb -isp
+	chown -R root.root debian/blankon-role-keyring-udeb
+	chmod -R go=rX debian/blankon-role-keyring-udeb
+	dpkg --build debian/blankon-role-keyring-udeb ../blankon-role-keyring-udeb_$(VERSION)_all.udeb
 
 binary-arch:
 
 define checkdir
-	test -f keyrings/blankon-archive-keyring.gpg
+	test -f keyrings/blankon-role-keyring.gpg
 endef
 
 # Below here is fairly generic really
@@ -73,4 +75,4 @@ checkroot:
 	$(checkdir)
 	test root = "`whoami`"
 
-.PHONY: binary binary-arch binary-indep clean checkroot build
+.PHONY: binary binary-arch binary-indep clean checkroot
