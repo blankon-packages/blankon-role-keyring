@@ -3,27 +3,15 @@
 # the keyring in /var that gets fetched by apt-key net-update
 # if it does not yet exist, copy it to avoid uneeded net copy
 KEYRINGDIR="/var/lib/apt/keyrings"
-KEYRING="${KEYRINGDIR}/blankon-role-keyring.gpg"
+KEYRING="${KEYRINGDIR}/blankon-role-archive-keyring.gpg"
 
 if ! test -d $KEYRINGDIR; then
      mkdir -m 755 -p $KEYRINGDIR
 fi
 
 if ! test -f $KEYRING; then
-     cp /usr/share/keyrings/blankon-role-keyring.gpg $KEYRING
+     cp /usr/share/keyrings/blankon-role-archive-keyring.gpg $KEYRING
      touch $KEYRING
-fi
-
-ACTIVEDIR="/etc/apt/trusted.gpg.d"
-ACTIVE="${ACTIVEDIR}/blankon-role-keyring.gpg"
-
-if ! test -d $ACTIVEDIR; then
-     mkdir -m 755 -p $ACTIVEDIR
-fi
-
-if ! test -f $ACTIVE; then
-     cp /etc/apt/trusted.gpg.d/blankon-role-keyring.gpg $ACTIVE
-     touch $ACTIVE
 fi
 
 # sensible default permissions if there is no keyring yet
@@ -39,6 +27,11 @@ fi
 # because it uses the trusted.gpg keyring to verify the signature (as user)
 if dpkg --compare-versions "$2" lt-nl "2010.+09.30"; then
     chmod 0644 $ETC_KEYRING
+fi
+
+# add keyring blankon
+if [ -x /usr/bin/apt-key ]; then
+    /usr/bin/apt-key add /usr/share/keyrings/blankon-role-archive-keyring.gpg
 fi
 
 # make sure apt knows about the new keys

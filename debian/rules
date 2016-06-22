@@ -8,7 +8,7 @@
 # my name from the file itself.  (I assert my moral right of
 # paternity under the Copyright, Designs and Patents Act 1988.)
 # This file may have to be extensively modified
-	
+
 install_dir=install -d -m 755
 install_file=install -m 644
 install_script=install -m 755
@@ -30,17 +30,15 @@ binary-indep: checkroot
 	$(install_script) debian/postinst debian/tmp/DEBIAN/
 
 	$(install_dir) debian/tmp/usr/share/keyrings/
-	$(install_file) keyrings/blankon-role-keyring.gpg debian/tmp/usr/share/keyrings/
+	$(install_file) keyrings/blankon-role-archive-keyring.gpg debian/tmp/usr/share/keyrings/
 	$(install_file) keyrings/blankon-role-master-keyring.gpg debian/tmp/usr/share/keyrings/
 
-	$(install_dir) debian/tmp/etc/apt/trusted.gpg.d/
-	$(install_file) active-keys/blankon-role-keyring.gpg debian/tmp/etc/apt/trusted.gpg.d/
-	
 	$(install_dir) debian/tmp/usr/share/doc/blankon-role-keyring/
 	$(install_file) README debian/tmp/usr/share/doc/blankon-role-keyring/
 	$(install_file) debian/changelog debian/tmp/usr/share/doc/blankon-role-keyring/changelog
 	gzip -9v debian/tmp/usr/share/doc/blankon-role-keyring/*
 	$(install_file) debian/copyright debian/tmp/usr/share/doc/blankon-role-keyring/
+	cd debian/tmp; find -type f \! -regex '.*/DEBIAN/.*' -printf '%P\0' | xargs -r0 md5sum >DEBIAN/md5sums
 
 	dpkg-gencontrol -pblankon-role-keyring -isp
 	chown -R root.root debian/tmp
@@ -51,7 +49,7 @@ binary-indep: checkroot
 	$(install_dir) debian/blankon-role-keyring-udeb/DEBIAN/
 
 	$(install_dir) debian/blankon-role-keyring-udeb/usr/share/keyrings/
-	$(install_file) keyrings/blankon-role-keyring.gpg debian/blankon-role-keyring-udeb/usr/share/keyrings/
+	$(install_file) keyrings/blankon-role-archive-keyring.gpg debian/blankon-role-keyring-udeb/usr/share/keyrings/
 	install -m 755 debian/blankon-role-keyring-udeb.postinst debian/blankon-role-keyring-udeb/DEBIAN/postinst
 
 	# Don't let dpkg-gencontrol write incorrect guesses to debian/files.
@@ -64,7 +62,7 @@ binary-indep: checkroot
 binary-arch:
 
 define checkdir
-	test -f keyrings/blankon-role-keyring.gpg
+	test -f keyrings/blankon-role-archive-keyring.gpg
 endef
 
 # Below here is fairly generic really
@@ -75,4 +73,4 @@ checkroot:
 	$(checkdir)
 	test root = "`whoami`"
 
-.PHONY: binary binary-arch binary-indep clean checkroot
+.PHONY: binary binary-arch binary-indep clean checkroot build
