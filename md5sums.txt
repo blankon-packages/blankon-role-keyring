@@ -1,1 +1,1 @@
-c6bfdbebd93b755f00f65edf1566e5b8  keyrings/blankon-role-keyring.gpg
+a2fa5351dd5466e94244970d043247f1  keyrings/blankon-role-keyring.gpg

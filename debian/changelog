@@ -1,3 +1,9 @@
+blankon-role-keyring (2016.06.22-1) tambora; urgency=medium
+
+  * Fix  
+
+ -- Rahman Yusri Aftian <aftian@localhost>  Wed, 22 Jun 2016 12:46:54 +0700
+
 blankon-role-keyring (2016.06.22) tambora; urgency=medium
 
   * Initial release
