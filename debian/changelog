@@ -1,6 +1,12 @@
+blankon-role-keyring (2016.08.31) tambora; urgency=medium
+
+  * Remove essentials
+
+ -- Mahyuddin <yudi.al@gmail.com>  Wed, 31 Aug 2016 11:59:17 +0700
+
 blankon-role-keyring (2016.06.22-3) tambora; urgency=medium
 
-  * Essential: yes 
+  * Essential: yes
 
  -- Rahman Yusri Aftian <aftian@blankon.id>  Mon, 29 Aug 2016 20:47:34 +0700
 
@@ -12,7 +18,7 @@ blankon-role-keyring (2016.06.22-2) tambora; urgency=medium
 
 blankon-role-keyring (2016.06.22-1) tambora; urgency=medium
 
-  * Fix  
+  * Fix
 
  -- Rahman Yusri Aftian <aftian@localhost>  Wed, 22 Jun 2016 12:46:54 +0700
 
